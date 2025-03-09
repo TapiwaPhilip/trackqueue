@@ -1,8 +1,8 @@
-
 import { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import { clubs as initialClubs, queueUpdates as initialUpdates } from '@/lib/mockData';
 import type { Club, QueueUpdate } from '@/lib/mockData';
 import { useToast } from '@/components/ui/use-toast';
+import { LocationService } from '@/services/LocationService';
 
 type ClubsContextType = {
   clubs: Club[];
@@ -10,16 +10,19 @@ type ClubsContextType = {
   isLoading: boolean;
   favoriteClubIds: string[];
   nearbyClubs: Club[];
-  userLocation: { city: string; country: string } | null;
+  userLocation: { city: string; country: string; coordinates?: { latitude: number; longitude: number } } | null;
   getClub: (id: string) => Club | undefined;
   getClubUpdates: (clubId: string) => QueueUpdate[];
   addQueueUpdate: (update: Omit<QueueUpdate, 'id' | 'timestamp'>) => void;
   refreshClubs: () => void;
   toggleFavorite: (clubId: string) => void;
   isFavorite: (clubId: string) => boolean;
-  setUserLocation: (location: { city: string; country: string }) => void;
+  setUserLocation: (location: { city: string; country: string; coordinates?: { latitude: number; longitude: number } }) => void;
   addNewClub: (club: Omit<Club, 'id'>) => void;
   filterClubsByLocation: (city?: string, country?: string) => Club[];
+  filterClubsByGenre: (genre?: string) => Club[];
+  filterClubsByDistance: (maxDistance?: number) => Club[];
+  getClubDistance: (clubId: string) => number | null;
 };
 
 const ClubsContext = createContext<ClubsContextType | undefined>(undefined);
@@ -32,16 +35,18 @@ export const ClubsProvider = ({ children }: { children: ReactNode }) => {
     const savedFavorites = localStorage.getItem('favoriteClubs');
     return savedFavorites ? JSON.parse(savedFavorites) : [];
   });
-  const [userLocation, setUserLocation] = useState<{ city: string; country: string } | null>(null);
+  const [userLocation, setUserLocation] = useState<{ 
+    city: string; 
+    country: string; 
+    coordinates?: { latitude: number; longitude: number } 
+  } | null>(null);
   const [nearbyClubs, setNearbyClubs] = useState<Club[]>([]);
   const { toast } = useToast();
 
-  // Save favorites to localStorage whenever they change
   useEffect(() => {
     localStorage.setItem('favoriteClubs', JSON.stringify(favoriteClubIds));
   }, [favoriteClubIds]);
 
-  // Update nearby clubs whenever userLocation or clubs change
   useEffect(() => {
     if (userLocation) {
       const filtered = clubs.filter(
@@ -70,7 +75,6 @@ export const ClubsProvider = ({ children }: { children: ReactNode }) => {
 
     setQueueUpdates(prev => [newUpdate, ...prev]);
 
-    // Update the club's current status
     setClubs(prev => 
       prev.map(club => {
         if (club.id === update.clubId) {
@@ -103,9 +107,8 @@ export const ClubsProvider = ({ children }: { children: ReactNode }) => {
 
   const refreshClubs = () => {
     setIsLoading(true);
-    // Simulate refresh from server
     setTimeout(() => {
-      setClubs(prev => [...prev]); // In a real app, this would be a fetch
+      setClubs(prev => [...prev]);
       setIsLoading(false);
       
       toast({
@@ -139,7 +142,11 @@ export const ClubsProvider = ({ children }: { children: ReactNode }) => {
     return favoriteClubIds.includes(clubId);
   };
 
-  const setLocationAndUpdateNearby = (location: { city: string; country: string }) => {
+  const setLocationAndUpdateNearby = (location: { 
+    city: string; 
+    country: string; 
+    coordinates?: { latitude: number; longitude: number } 
+  }) => {
     setUserLocation(location);
     toast({
       title: "Location updated",
@@ -173,6 +180,45 @@ export const ClubsProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
+  const filterClubsByGenre = (genre?: string) => {
+    if (!genre) return clubs;
+    
+    return clubs.filter(club => 
+      club.genres && club.genres.some(g => g.toLowerCase() === genre.toLowerCase())
+    );
+  };
+
+  const filterClubsByDistance = (maxDistance?: number) => {
+    if (!maxDistance || !userLocation?.coordinates) return clubs;
+    
+    return clubs.filter(club => {
+      if (!club.coordinates) return false;
+      
+      const distance = LocationService.calculateDistance(
+        userLocation.coordinates.latitude,
+        userLocation.coordinates.longitude,
+        club.coordinates.latitude,
+        club.coordinates.longitude
+      );
+      
+      return distance <= maxDistance;
+    });
+  };
+
+  const getClubDistance = (clubId: string): number | null => {
+    if (!userLocation?.coordinates) return null;
+    
+    const club = getClub(clubId);
+    if (!club?.coordinates) return null;
+    
+    return LocationService.calculateDistance(
+      userLocation.coordinates.latitude,
+      userLocation.coordinates.longitude,
+      club.coordinates.latitude,
+      club.coordinates.longitude
+    );
+  };
+
   return (
     <ClubsContext.Provider
       value={{
@@ -191,6 +237,9 @@ export const ClubsProvider = ({ children }: { children: ReactNode }) => {
         setUserLocation: setLocationAndUpdateNearby,
         addNewClub,
         filterClubsByLocation,
+        filterClubsByGenre,
+        filterClubsByDistance,
+        getClubDistance,
       }}
     >
       {children}

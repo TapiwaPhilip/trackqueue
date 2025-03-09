@@ -11,7 +11,15 @@ import AddClub from "./pages/AddClub";
 import ClubDetail from "./components/ClubDetail";
 import NotFound from "./pages/NotFound";
 
-const queryClient = new QueryClient();
+// Configure the query client
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      retry: 1,
+    },
+  },
+});
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
