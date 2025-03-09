@@ -6,6 +6,7 @@ import { Search, Menu, X, RefreshCw } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import AuthModal from './AuthModal';
 import { useClubs } from '@/context/ClubsContext';
+import Logo from './Logo';
 
 const Navbar = () => {
   const [searchOpen, setSearchOpen] = useState(false);
@@ -48,8 +49,9 @@ const Navbar = () => {
             to="/" 
             className="text-2xl font-bold flex items-center text-white transition-transform hover:scale-105"
           >
-            <span className="text-nightPurple mr-1">Q</span>
-            <span>Tracker</span>
+            <Logo className="mr-2" />
+            <span className="text-nightPurple">Track</span>
+            <span>Queue</span>
           </Link>
           
           <div className="hidden md:flex items-center space-x-6">

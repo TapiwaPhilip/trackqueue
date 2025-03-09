@@ -10,6 +10,7 @@ import Index from "./pages/Index";
 import AddClub from "./pages/AddClub";
 import ClubDetail from "./components/ClubDetail";
 import NotFound from "./pages/NotFound";
+import LogoFavicon from "./components/LogoFavicon";
 
 // Configure the query client
 const queryClient = new QueryClient({
@@ -24,6 +25,7 @@ const queryClient = new QueryClient({
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
+      <LogoFavicon />
       <Toaster />
       <Sonner />
       <AuthProvider>
