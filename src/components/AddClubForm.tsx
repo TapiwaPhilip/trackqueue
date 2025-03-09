@@ -17,6 +17,9 @@ const AddClubForm = () => {
     location: '',
     description: '',
     image: '',
+    latitude: '',
+    longitude: '',
+    genres: '',
   });
   
   const [formError, setFormError] = useState('');
@@ -45,6 +48,17 @@ const AddClubForm = () => {
     setIsSubmitting(true);
     
     try {
+      // Parse coordinates if provided
+      const coordinates = formData.latitude && formData.longitude ? {
+        latitude: parseFloat(formData.latitude),
+        longitude: parseFloat(formData.longitude)
+      } : undefined;
+      
+      // Parse genres
+      const genres = formData.genres ? 
+        formData.genres.split(',').map(genre => genre.trim()) : 
+        undefined;
+      
       // Prepare the club data with default values
       const newClubData = {
         name: formData.name,
@@ -56,7 +70,9 @@ const AddClubForm = () => {
           waitTime: 0,
           lastUpdated: new Date().toISOString(),
           trend: 'stable' as const
-        }
+        },
+        coordinates,
+        genres
       };
       
       // Add the club
@@ -147,6 +163,53 @@ const AddClubForm = () => {
           <p className="text-xs text-nightMuted mt-1">
             Leave empty to use a default image
           </p>
+        </div>
+        
+        <div>
+          <label htmlFor="genres" className="block text-sm font-medium text-nightMuted mb-1">
+            Music Genres (optional, comma-separated)
+          </label>
+          <Input
+            id="genres"
+            name="genres"
+            value={formData.genres}
+            onChange={handleChange}
+            placeholder="Techno, House, Electronic"
+            className="bg-nightGray border-nightStroke"
+          />
+        </div>
+        
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label htmlFor="latitude" className="block text-sm font-medium text-nightMuted mb-1">
+              Latitude (optional)
+            </label>
+            <Input
+              id="latitude"
+              name="latitude"
+              value={formData.latitude}
+              onChange={handleChange}
+              placeholder="52.5200"
+              className="bg-nightGray border-nightStroke"
+              type="number"
+              step="any"
+            />
+          </div>
+          <div>
+            <label htmlFor="longitude" className="block text-sm font-medium text-nightMuted mb-1">
+              Longitude (optional)
+            </label>
+            <Input
+              id="longitude"
+              name="longitude"
+              onChange={handleChange}
+              value={formData.longitude}
+              placeholder="13.4050"
+              className="bg-nightGray border-nightStroke"
+              type="number"
+              step="any"
+            />
+          </div>
         </div>
         
         <Button

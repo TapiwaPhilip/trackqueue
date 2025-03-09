@@ -1,4 +1,3 @@
-
 export type Club = {
   id: string;
   name: string;
@@ -10,6 +9,11 @@ export type Club = {
     waitTime: number; // in minutes
     lastUpdated: string; // ISO date string
     trend: 'increasing' | 'decreasing' | 'stable';
+  };
+  genres?: string[];
+  coordinates?: {
+    latitude: number;
+    longitude: number;
   };
 };
 
@@ -37,6 +41,11 @@ export const clubs: Club[] = [
       lastUpdated: new Date(Date.now() - 15 * 60 * 1000).toISOString(),
       trend: 'increasing',
     },
+    genres: ['Techno', 'House', 'Electronic'],
+    coordinates: {
+      latitude: 52.5111,
+      longitude: 13.4399
+    }
   },
   {
     id: '2',
@@ -50,6 +59,11 @@ export const clubs: Club[] = [
       lastUpdated: new Date(Date.now() - 35 * 60 * 1000).toISOString(),
       trend: 'stable',
     },
+    genres: ['House', 'Tech House', 'Electronic'],
+    coordinates: {
+      latitude: 52.5031,
+      longitude: 13.4416
+    }
   },
   {
     id: '3',
@@ -63,6 +77,11 @@ export const clubs: Club[] = [
       lastUpdated: new Date(Date.now() - 55 * 60 * 1000).toISOString(),
       trend: 'decreasing',
     },
+    genres: ['Techno', 'Industrial', 'Minimal'],
+    coordinates: {
+      latitude: 52.5102,
+      longitude: 13.4198
+    }
   },
   {
     id: '4',
@@ -76,6 +95,11 @@ export const clubs: Club[] = [
       lastUpdated: new Date(Date.now() - 25 * 60 * 1000).toISOString(),
       trend: 'increasing',
     },
+    genres: ['Techno', 'Electronic', 'Alternative'],
+    coordinates: {
+      latitude: 52.5068,
+      longitude: 13.4253
+    }
   },
   {
     id: '5',
@@ -89,6 +113,11 @@ export const clubs: Club[] = [
       lastUpdated: new Date(Date.now() - 40 * 60 * 1000).toISOString(),
       trend: 'stable',
     },
+    genres: ['House', 'Techno', 'Minimal'],
+    coordinates: {
+      latitude: 52.4869,
+      longitude: 13.4901
+    }
   },
 ];
 
