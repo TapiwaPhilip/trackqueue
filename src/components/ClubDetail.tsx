@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Users, Clock, ArrowUp, ArrowDown, Minus } from 'lucide-react';
+import { ArrowLeft, Users, Clock, ArrowUp, ArrowDown, Minus, Heart } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import UpdatesList from '@/components/UpdatesList';
 import QueueUpdate from '@/components/QueueUpdate';
@@ -11,11 +11,12 @@ import { formatTimeAgo } from '@/lib/mockData';
 
 const ClubDetail = () => {
   const { id } = useParams<{ id: string }>();
-  const { getClub, getClubUpdates } = useClubs();
+  const { getClub, getClubUpdates, toggleFavorite, isFavorite } = useClubs();
   const [isLoading, setIsLoading] = useState(true);
   
   const club = getClub(id || '');
   const updates = getClubUpdates(id || '');
+  const isFav = id ? isFavorite(id) : false;
   
   useEffect(() => {
     // Simulate loading state
@@ -81,6 +82,12 @@ const ClubDetail = () => {
     }
   };
 
+  const handleFavoriteToggle = () => {
+    if (id) {
+      toggleFavorite(id);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-nightShade">
       <Navbar />
@@ -93,13 +100,22 @@ const ClubDetail = () => {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-nightShade to-transparent" />
         
-        <div className="absolute top-4 left-4">
+        <div className="absolute top-4 left-4 flex space-x-2">
           <Link 
             to="/" 
             className="glass rounded-full p-2 inline-block hover:border-nightPurple transition-colors"
           >
             <ArrowLeft className="h-5 w-5 text-white" />
           </Link>
+          
+          <button 
+            onClick={handleFavoriteToggle}
+            className="glass rounded-full p-2 inline-block hover:border-nightPurple transition-colors"
+          >
+            <Heart 
+              className={`h-5 w-5 ${isFav ? 'text-nightPink fill-nightPink' : 'text-white'}`} 
+            />
+          </button>
         </div>
       </div>
       

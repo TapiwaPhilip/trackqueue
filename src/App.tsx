@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import { ClubsProvider } from "./context/ClubsContext";
 import Index from "./pages/Index";
+import AddClub from "./pages/AddClub";
 import ClubDetail from "./components/ClubDetail";
 import NotFound from "./pages/NotFound";
 
@@ -23,6 +24,7 @@ const App = () => (
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/club/:id" element={<ClubDetail />} />
+              <Route path="/add-club" element={<AddClub />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
