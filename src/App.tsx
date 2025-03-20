@@ -22,7 +22,7 @@ const queryClient = new QueryClient({
   },
 });
 
-const App = () => (
+const App = React.memo(() => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <LogoFavicon />
@@ -42,6 +42,6 @@ const App = () => (
       </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>
-);
+));
 
 export default App;
