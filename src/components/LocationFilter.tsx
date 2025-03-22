@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { MapPin, Search, Loader2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
@@ -17,7 +18,7 @@ const LocationFilter = ({ onLocationChange }: LocationFilterProps) => {
   const [isLocating, setIsLocating] = useState(false);
   const { toast } = useToast();
   
-  // Initialize with userLocation if it exists
+  // Initialize with userLocation if it exists, but don't show toasts
   useEffect(() => {
     if (userLocation) {
       setCity(userLocation.city);
@@ -50,7 +51,8 @@ const LocationFilter = ({ onLocationChange }: LocationFilterProps) => {
       if (location) {
         setCity(location.city);
         setCountry(location.country);
-        setUserLocation(location, true); // Show toast for this user action
+        // Only show a toast when user explicitly clicks the detect button
+        setUserLocation(location, true); 
         onLocationChange(location.city, location.country);
         toast({
           title: "Location detected",

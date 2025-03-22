@@ -37,13 +37,14 @@ const Index = () => {
     maxDistance?: number;
   }>({});
   
-  // Try to get user location on mount
+  // Try to get user location on mount WITHOUT showing toast
   useEffect(() => {
     const getLocation = async () => {
       try {
         const location = await LocationService.getUserLocation();
         if (location) {
-          setUserLocation(location);
+          // Pass false to prevent toast notification
+          setUserLocation(location, false);
         }
       } catch (error) {
         console.error('Error getting user location:', error);

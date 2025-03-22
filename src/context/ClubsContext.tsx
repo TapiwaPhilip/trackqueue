@@ -1,3 +1,4 @@
+
 import { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import { clubs as initialClubs, queueUpdates as initialUpdates } from '@/lib/mockData';
 import type { Club, QueueUpdate } from '@/lib/mockData';
@@ -47,6 +48,7 @@ export const ClubsProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem('favoriteClubs', JSON.stringify(favoriteClubIds));
   }, [favoriteClubIds]);
 
+  // Update nearbyClubs without triggering any toasts
   useEffect(() => {
     if (userLocation) {
       const filtered = clubs.filter(
@@ -146,7 +148,7 @@ export const ClubsProvider = ({ children }: { children: ReactNode }) => {
     city: string; 
     country: string; 
     coordinates?: { latitude: number; longitude: number } 
-  }, showToast: boolean = true) => {
+  }, showToast: boolean = false) => { // Change default to false to prevent any accidental toasts
     setUserLocation(location);
     if (showToast) {
       toast({
