@@ -1,3 +1,4 @@
+
 export type Club = {
   id: string;
   name: string;
@@ -33,7 +34,7 @@ export const clubs: Club[] = [
     id: '1',
     name: 'Berghain',
     location: 'Berlin, Germany',
-    image: 'https://images.unsplash.com/photo-1578760039517-aa4cbe9e707b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1074&q=80',
+    image: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1074&q=80',
     description: 'The world-famous techno club located in a former power plant, known for its strict door policy and marathon parties.',
     currentStatus: {
       queueLength: 180,
@@ -87,7 +88,7 @@ export const clubs: Club[] = [
     id: '4',
     name: 'KitKatClub',
     location: 'Berlin, Germany',
-    image: 'https://images.unsplash.com/photo-1571204829887-3b8d69e23af5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80',
+    image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80',
     description: 'Notorious fetish and techno club known for its libertine door policy and hedonistic atmosphere.',
     currentStatus: {
       queueLength: 90,

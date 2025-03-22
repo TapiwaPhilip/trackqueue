@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Users, Clock, ArrowUp, ArrowDown, Minus, Heart } from 'lucide-react';
@@ -95,6 +96,10 @@ const ClubDetail = () => {
           src={image}
           alt={name}
           className="w-full h-full object-cover"
+          onError={(e) => {
+            // Fallback to a default image if the club image fails to load
+            e.currentTarget.src = "https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?ixlib=rb-4.0.3&auto=format&fit=crop&w=1074&q=80";
+          }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-nightShade to-transparent" />
         
