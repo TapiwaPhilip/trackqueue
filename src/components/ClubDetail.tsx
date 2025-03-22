@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Users, Clock, ArrowUp, ArrowDown, Minus, Heart } from 'lucide-react';
@@ -19,7 +18,6 @@ const ClubDetail = () => {
   const isFav = id ? isFavorite(id) : false;
   
   useEffect(() => {
-    // Simulate loading state
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 800);
@@ -172,7 +170,7 @@ const ClubDetail = () => {
       <footer className="py-8 border-t border-nightStroke">
         <div className="container px-4 mx-auto text-center">
           <p className="text-sm text-nightMuted">
-            © {new Date().getFullYear()} QTracker - Real-time nightclub queue tracking
+            © {new Date().getFullYear()} TrackQueue - Real-time nightclub queue tracking
           </p>
         </div>
       </footer>
