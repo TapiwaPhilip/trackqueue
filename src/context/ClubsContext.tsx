@@ -17,7 +17,7 @@ type ClubsContextType = {
   refreshClubs: () => void;
   toggleFavorite: (clubId: string) => void;
   isFavorite: (clubId: string) => boolean;
-  setUserLocation: (location: { city: string; country: string; coordinates?: { latitude: number; longitude: number } }) => void;
+  setUserLocation: (location: { city: string; country: string; coordinates?: { latitude: number; longitude: number } }, showToast?: boolean) => void;
   addNewClub: (club: Omit<Club, 'id'>) => void;
   filterClubsByLocation: (city?: string, country?: string) => Club[];
   filterClubsByGenre: (genre?: string) => Club[];
@@ -146,12 +146,14 @@ export const ClubsProvider = ({ children }: { children: ReactNode }) => {
     city: string; 
     country: string; 
     coordinates?: { latitude: number; longitude: number } 
-  }) => {
+  }, showToast: boolean = true) => {
     setUserLocation(location);
-    toast({
-      title: "Location updated",
-      description: `Showing clubs near ${location.city}, ${location.country}.`,
-    });
+    if (showToast) {
+      toast({
+        title: "Location updated",
+        description: `Showing clubs near ${location.city}, ${location.country}.`,
+      });
+    }
   };
 
   const addNewClub = (clubData: Omit<Club, 'id'>) => {

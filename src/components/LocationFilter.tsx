@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { MapPin, Search, Loader2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
@@ -51,7 +50,7 @@ const LocationFilter = ({ onLocationChange }: LocationFilterProps) => {
       if (location) {
         setCity(location.city);
         setCountry(location.country);
-        setUserLocation(location);
+        setUserLocation(location, true); // Show toast for this user action
         onLocationChange(location.city, location.country);
         toast({
           title: "Location detected",

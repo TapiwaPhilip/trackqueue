@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/select";
 import { LocationService } from "@/services/LocationService";
 import { Globe } from "lucide-react";
+import { useClubs } from "@/context/ClubsContext";
 
 // List of countries
 const countries = [
@@ -41,6 +42,7 @@ const STORAGE_KEY = 'qtracker-country';
 const CountrySelector = () => {
   const [selectedCountry, setSelectedCountry] = useState("");
   const [loading, setLoading] = useState(true);
+  const { setUserLocation } = useClubs();
 
   useEffect(() => {
     const detectUserCountry = async () => {
@@ -58,29 +60,34 @@ const CountrySelector = () => {
         const locationData = await LocationService.getUserLocation();
         if (locationData && locationData.country) {
           setSelectedCountry(locationData.country);
-          // Save to localStorage
+          // Save to localStorage and update user location without showing toast
           localStorage.setItem(STORAGE_KEY, locationData.country);
+          setUserLocation(locationData, false);
         } else {
           // Default to something if detection fails
           setSelectedCountry("United States");
           localStorage.setItem(STORAGE_KEY, "United States");
+          setUserLocation({ city: "New York", country: "United States" }, false);
         }
       } catch (error) {
         console.error("Failed to detect country:", error);
         setSelectedCountry("United States");
         localStorage.setItem(STORAGE_KEY, "United States");
+        setUserLocation({ city: "New York", country: "United States" }, false);
       } finally {
         setLoading(false);
       }
     };
 
     detectUserCountry();
-  }, []);
+  }, [setUserLocation]);
 
   const handleCountryChange = (value: string) => {
     setSelectedCountry(value);
     // Save to localStorage without showing toast
     localStorage.setItem(STORAGE_KEY, value);
+    // Update user location without showing toast
+    setUserLocation({ city: "", country: value }, false);
   };
 
   return (
