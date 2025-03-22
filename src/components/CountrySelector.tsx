@@ -36,6 +36,8 @@ const countries = [
   "Yemen", "Zambia", "Zimbabwe"
 ];
 
+const STORAGE_KEY = 'qtracker-country';
+
 const CountrySelector = () => {
   const [selectedCountry, setSelectedCountry] = useState("");
   const [loading, setLoading] = useState(true);
@@ -43,16 +45,30 @@ const CountrySelector = () => {
   useEffect(() => {
     const detectUserCountry = async () => {
       try {
+        // First try to get from localStorage
+        const savedCountry = localStorage.getItem(STORAGE_KEY);
+        
+        if (savedCountry) {
+          setSelectedCountry(savedCountry);
+          setLoading(false);
+          return;
+        }
+        
+        // If not in localStorage, detect from location service
         const locationData = await LocationService.getUserLocation();
         if (locationData && locationData.country) {
           setSelectedCountry(locationData.country);
+          // Save to localStorage
+          localStorage.setItem(STORAGE_KEY, locationData.country);
         } else {
           // Default to something if detection fails
           setSelectedCountry("United States");
+          localStorage.setItem(STORAGE_KEY, "United States");
         }
       } catch (error) {
         console.error("Failed to detect country:", error);
         setSelectedCountry("United States");
+        localStorage.setItem(STORAGE_KEY, "United States");
       } finally {
         setLoading(false);
       }
@@ -63,8 +79,8 @@ const CountrySelector = () => {
 
   const handleCountryChange = (value: string) => {
     setSelectedCountry(value);
-    // We could add more functionality here like storing the selection
-    // in localStorage or triggering some country-specific content
+    // Save to localStorage without showing toast
+    localStorage.setItem(STORAGE_KEY, value);
   };
 
   return (
