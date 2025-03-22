@@ -63,8 +63,8 @@ const CountrySelector = () => {
 
   const handleCountryChange = (value: string) => {
     setSelectedCountry(value);
-    // We could add more functionality here like storing the selection
-    // in localStorage or triggering some country-specific content
+    // We store the selection in localStorage but don't show a toast notification
+    localStorage.setItem('userCountry', value);
   };
 
   return (
